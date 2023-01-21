@@ -42,7 +42,9 @@ let currentLetter = 0;
 
    
   }
+  
 </script>
+
 
 <main>
 
@@ -69,9 +71,6 @@ let currentLetter = 0;
 	  </button>
     {/if}
 
-	
-
-	
 </main>
 
 <style >
