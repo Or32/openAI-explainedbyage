@@ -55,9 +55,9 @@ let currentLetter = 0;
 			<TextInput  bind:value={text} />
 		</div>
 	
-
+		{#if !interval}
 		<button class="button-49" role="button" on:click={startTyping}>explain</button>
-
+		{/if}
 	<p>{displayedText}</p>
 
 		
