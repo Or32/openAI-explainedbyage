@@ -64,7 +64,7 @@ let currentLetter = 0;
 	</SvelteUIProvider>	  
 	{#if interval}
 	
-	 <button class="button-49 stop" role="button" on:click={clearInterval(interval)}>
+	 <button class="button-49 stop" role="button" on:click={()=>{clearInterval(interval); interval = undefined} }>
 		stop
 	  </button>
     {/if}
