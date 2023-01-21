@@ -20,7 +20,7 @@
 
 	
 
-	await axios.post('http://localhost:3000/answer', {
+	await axios.post('https://open-ia-backend-nodejs-lf9k.vercel.app/answer', {
 	"question":text,
     "age":age
 }).then((response) => {
