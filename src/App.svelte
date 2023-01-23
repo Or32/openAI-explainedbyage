@@ -8,32 +8,87 @@
 
     $: lightColor = `hsl(${Math.round(age[0]) - 10}, 65%, 70%)`;
     $: color = `hsl(${Math.round(age[0])}, 63%, 54%)`;
-
+  let loading = false;
   let age = 48;
   let text = "";
   let currentLetter = 0;
   let displayedText = "";
   let interval
+  let user = {
+    AARP: 'https://www.aarp.org/',
+	"Google": "https://www.google.com",
+   "Facebook": "https://www.facebook.com",
+   "Twitter": "https://twitter.com",
+  "Instagram": "https://www.instagram.com",
+  "LinkedIn": "https://www.linkedin.com",
+  "Youtube": "https://www.youtube.com",
+  "Amazon": "https://www.amazon.com",
+  "Wikipedia": "https://www.wikipedia.org",
+  "Reddit": "https://www.reddit.com",
+  "Netflix": "https://www.netflix.com",
+  "Spotify": "https://www.spotify.com",
+  "WhatsApp": "https://www.whatsapp.com",
+  "Gmail": "https://mail.google.com",
+  "Yahoo": "https://www.yahoo.com",
+  "Outlook": "https://www.outlook.com",
+  "Stack Overflow": "https://stackoverflow.com",
+  "GitHub": "https://github.com",
+  "TikTok": "https://www.tiktok.com",
+  "Pinterest": "https://www.pinterest.com",
+  "Quora": "https://www.quora.com",
+  "Snapchat": "https://www.snapchat.com",
+};
+
 
 
   async function startTyping() {
+	loading = true;
 
-	
-
-	await axios.post('https://open-ia-backend-nodejs-lf9k.vercel.app/answer', {
+	await axios.post('http://localhost:3000/answer', { //https://open-ia-backend-nodejs-lf9k.vercel.app/answer
 	"question":text,
     "age":age
 }).then((response) => {
+	console.log(response.data)
+	loading = false;
+	function splitText(text) {
+    let lines = text.split(/\n/);
+    let words = [];
+    lines.forEach(line => {
+      words = words.concat(line.split(" "));
+    });
+    return words;
+}
+
+
+	let myArray = splitText(response.data);
+	myArray = myArray.map(s => s === "" ? "<br/>" : s);
+
 	 interval = setInterval(() => {
+        if (currentLetter < myArray.length) {
+			if(myArray[currentLetter] in user){
+				displayedText +=  ` <a href="${user[myArray[currentLetter]]}" target="_blank">${myArray[currentLetter]}</a> `;
+                currentLetter++;
+				
+			}
+			if(myArray[currentLetter] =="\n" ){
+				displayedText += ` \n`;
+                currentLetter++;
+
+			}else{
+
+                displayedText += ` ${myArray[currentLetter]}`;
+                currentLetter++;
+				
+			}
 		
-		
-        if (currentLetter < response.data.length) {
-            displayedText += response.data[currentLetter];
-            currentLetter++;
-        }
-    }, 100);
+        }else{
+			interval = undefined;
+			clearInterval(interval);
+		}
+    }, Math.random() * (300 - 100) +100 );
 	
 }, (error) => {
+  loading = false;
   console.log(error);
 });
 text =''
@@ -42,6 +97,9 @@ let currentLetter = 0;
 
    
   }
+
+
+  
   
 </script>
 
@@ -57,14 +115,25 @@ let currentLetter = 0;
 			<TextInput  bind:value={text} />
 		</div>
 	
-		{#if !interval}
+		{#if !interval && !loading}
 		<button class="button-49" role="button" on:click={startTyping}>explain</button>
 		{/if}
-	<p>{displayedText}</p>
+		{#if loading}
+        <div>Loading...</div>
+       {:else}
+	    <div class="answer-div">
+		<p class="answer">{@html displayedText}</p>
+	     </div>
+        {/if}
+		
+
+		
+		
+	    
 
 		
 	</SvelteUIProvider>	  
-	{#if interval}
+	{#if interval }
 	
 	 <button class="button-49 stop" role="button" on:click={()=>{clearInterval(interval); interval = undefined} }>
 		stop
@@ -72,6 +141,12 @@ let currentLetter = 0;
     {/if}
 
 </main>
+
+
+
+
+
+
 
 <style >
 #color-pips {
@@ -117,9 +192,25 @@ let currentLetter = 0;
 		margin-bottom: 3em;
 	}
 	.input{
-		margin-bottom: 3em;
+		margin-bottom: 1em;
 
 
+	}
+	.answer-div{
+		display: block;
+        margin-left: auto;
+        margin-right: auto;
+		width: 80%;
+	
+		
+	}
+	.answer{
+		text-align: left;
+		justify-content: center;
+		max-width: fit-content;
+		line-height: 150%;
+		
+		
 	}
 
 
