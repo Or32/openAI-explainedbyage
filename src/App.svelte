@@ -44,7 +44,7 @@
   async function startTyping() {
 	loading = true;
 
-	await axios.post('http://localhost:3000/answer', { //https://open-ia-backend-nodejs-lf9k.vercel.app/answer
+	await axios.post('https://open-ia-backend-nodejs-lf9k.vercel.app/answer', { //https://open-ia-backend-nodejs-lf9k.vercel.app/answer http://localhost:3000/answer
 	"question":text,
     "age":age
 }).then((response) => {
